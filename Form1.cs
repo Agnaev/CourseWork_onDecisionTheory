@@ -4,7 +4,9 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,9 +14,131 @@ namespace CourseWork_theoryOfDecide
 {
     public partial class Form1 : Form
     {
+        private Control[,] text;
         public Form1()
         {
+
             InitializeComponent();
+        }
+
+        private void btn_createMatrix_Click(object sender, EventArgs e)
+        {
+            int.TryParse(textBox_countOfVertexes.Text, out int countOfVertexes);
+            if (countOfVertexes < 0)
+            {
+                MessageBox.Show("Укажите корректное число вершин.");
+                return;
+            }
+
+            if (countOfVertexes > 50)
+            {
+                MessageBox.Show("Слишком большое количество вершин.");
+                return;
+            }
+
+            text = new Control[countOfVertexes, countOfVertexes];
+            for (int i = 0; i < countOfVertexes; i++)
+            {
+                for (int j = 0; j < countOfVertexes; j++)
+                {
+                    text[i, j] = new TextBox
+                    {
+                        Location = new Point(26 + j * 60, 98 + i * 30),
+                        Size = new Size(50, 20),
+                        Visible = true,
+                        Enabled = i < j,
+                        Text = i == j ? "0" : "",
+                        Name = $"{i}_{j}"
+                    };
+
+                    text[i, j].TextChanged += new EventHandler(TextBox_TextChanged);
+
+                    AddElementToForm(text[i, j]);
+                }
+            }
+
+            btn_getAnswer = new Button();
+            btn_getAnswer.Click += getAnswer_click;
+            btn_createMatrix.Visible = false;
+            btn_getAnswer.Text = "Получить ответ.";
+            btn_getAnswer.Location = new Point(26, 69);
+            btn_getAnswer.Size = new Size(257, 23);
+            AddElementToForm(btn_getAnswer);
+
+
+        }
+
+        /// <summary>
+        /// Заполнение значениями текстбоксов которые ниже главной диагонали
+        /// </summary>
+        /// <param name="sender">стандартный параметр</param>
+        /// <param name="e">стандартный параметр</param>
+        private void TextBox_TextChanged(object sender, EventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            var coordinats = tb.Name.Split(new char[] { '_' });
+            int.TryParse(coordinats[1], out int x);//второре значение записывается в первое
+            int.TryParse(coordinats[0], out int y);//первое - во второе
+            text[x, y].Text = tb.Text;
+        }
+
+        /// <summary>
+        /// Посчитать ответ после ввода матрицы смежности
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void getAnswer_click(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var textBox in text)
+                {
+                    if (string.IsNullOrEmpty(textBox.Text))
+                    {
+                        MessageBox.Show("Заполните всю матрицу смежности");
+                        return;
+                    }
+                    if (!Regex.IsMatch(textBox.Text, @"^\d*$"))
+                    {
+                        MessageBox.Show("Разрешается вводить только числа");
+                        return;
+                    }
+                }
+
+                List<Edge> Edges = new List<Edge>();
+                for (int i = 1; i <= text.GetLength(0); i++)
+                {
+                    for (int j = 1; j <= text.GetLength(1); j++)
+                    {
+                        double.TryParse(text[i - 1, j - 1].Text, out double temp);
+                        if (i != j && temp != 0)
+                        {
+                            text[i - 1, j - 1].Text = temp.ToString();
+                            Edges.Add(new Edge(i, j, temp));
+                        }
+                    }
+                }
+
+                var result = Kernel.algorithmByPrim(text.GetLength(0), Edges);
+
+                Control[] labels = new Control[text.GetLength(0)];
+                int pos = 26 + text.GetLength(0) * 60;
+                for(int i = 0; i < result.Count; i++)
+                {
+                    labels[i] = new Label()
+                    {
+                        Size = new Size(151, 13),
+                        Location = new Point(26, pos + i * 25),
+                        Text = $"from {result[i].Vertex1} to {result[i].Vertex2} with weight {result[i].Weight}"
+                    };
+                    AddElementToForm(labels[i]);
+                }
+            }
+            catch (Exception exc)
+            {
+                ExceptionWriter(exc);
+                return;
+            }
         }
     }
 }
