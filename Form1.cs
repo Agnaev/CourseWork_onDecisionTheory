@@ -56,16 +56,16 @@ namespace CourseWork_theoryOfDecide
                     AddElementToForm(text[i, j]);
                 }
             }
+            Button btn_getAnswer = new Button
+            {
+                Text = "Получить ответ.",
+                Location = new Point(26, 69),
+                Size = new Size(257, 23)
+            };
+            btn_getAnswer.Click += GetAnswer_click;
 
-            btn_getAnswer = new Button();
-            btn_getAnswer.Click += getAnswer_click;
             btn_createMatrix.Visible = false;
-            btn_getAnswer.Text = "Получить ответ.";
-            btn_getAnswer.Location = new Point(26, 69);
-            btn_getAnswer.Size = new Size(257, 23);
             AddElementToForm(btn_getAnswer);
-
-
         }
 
         /// <summary>
@@ -87,23 +87,21 @@ namespace CourseWork_theoryOfDecide
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void getAnswer_click(object sender, EventArgs e)
+        private void GetAnswer_click(object sender, EventArgs e)
         {
             try
             {
                 foreach (var textBox in text)
-                {
                     if (string.IsNullOrEmpty(textBox.Text))
                     {
                         MessageBox.Show("Заполните всю матрицу смежности");
                         return;
                     }
-                    if (!Regex.IsMatch(textBox.Text, @"^\d*$"))
+                    else if (!Regex.IsMatch(textBox.Text, @"^\d*$"))
                     {
                         MessageBox.Show("Разрешается вводить только числа");
                         return;
                     }
-                }
 
                 List<Edge> Edges = new List<Edge>();
                 for (int i = 1; i <= text.GetLength(0); i++)
@@ -121,23 +119,37 @@ namespace CourseWork_theoryOfDecide
 
                 var result = Kernel.algorithmByPrim(text.GetLength(0), Edges);
 
-                Control[] labels = new Control[text.GetLength(0)];
                 int pos = 26 + text.GetLength(0) * 60;
-                for(int i = 0; i < result.Count; i++)
+                double sum = 0;
+                for (int i = 0; i < result.Count; i++)
                 {
-                    labels[i] = new Label()
+                    AddElementToForm(new Label()
                     {
                         Size = new Size(151, 13),
                         Location = new Point(26, pos + i * 25),
                         Text = $"from {result[i].Vertex1} to {result[i].Vertex2} with weight {result[i].Weight}"
-                    };
-                    AddElementToForm(labels[i]);
+                    });
+                    sum += result[i].Weight;
                 }
+                AddElementToForm(new Label()
+                {
+                    Size = new Size(151, 13),
+                    Location = new Point(26, pos + result.Count * 25),
+                    Text = $"Total weights is {sum}"
+                });
             }
             catch (Exception exc)
             {
                 ExceptionWriter(exc);
                 return;
+            }
+        }
+
+        private void TextBox_countOfVertexes_TextChanged(object sender, EventArgs e)
+        {
+            if (!Regex.IsMatch(textBox_countOfVertexes.Text, @"^\d*$"))
+            {
+                MessageBox.Show("Разрешается вводить только числа");
             }
         }
     }

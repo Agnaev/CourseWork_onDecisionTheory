@@ -27,17 +27,28 @@ namespace CourseWork_theoryOfDecide
 
 
 
-        private bool AddElementToForm(Control elem)
+        private void AddElementToForm(Control elem)
         {
             try
             {
                 this.Controls.Add(elem);
-                return true;
             }
             catch(Exception e)
             {
                 ExceptionWriter(e);
-                return false;
+            }
+        }
+
+        private void RemoveElementFromForm(Control elem)
+        {
+            try
+            {
+                if (this.Controls.Contains(elem))
+                    this.Controls.Remove(elem);
+            }
+            catch(Exception e)
+            {
+                ExceptionWriter(e);
             }
         }
 
@@ -69,13 +80,14 @@ namespace CourseWork_theoryOfDecide
             this.textBox_countOfVertexes.Name = "textBox_countOfVertexes";
             this.textBox_countOfVertexes.Size = new System.Drawing.Size(100, 20);
             this.textBox_countOfVertexes.TabIndex = 0;
+            this.textBox_countOfVertexes.TextChanged += new System.EventHandler(this.TextBox_countOfVertexes_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(132, 43);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 13);
+            this.label1.Size = new System.Drawing.Size(271, 24);
             this.label1.TabIndex = 1;
             this.label1.Text = "Введите количество вершин";
             // 
@@ -109,7 +121,7 @@ namespace CourseWork_theoryOfDecide
         private TextBox textBox_countOfVertexes;
         private Label label1;
         private Button btn_createMatrix;
-        private Button btn_getAnswer;
+        
 
     }
 }
