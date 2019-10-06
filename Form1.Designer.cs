@@ -81,6 +81,7 @@ namespace CourseWork_theoryOfDecide
             this.textBox_countOfVertexes.Size = new System.Drawing.Size(100, 20);
             this.textBox_countOfVertexes.TabIndex = 0;
             this.textBox_countOfVertexes.TextChanged += new System.EventHandler(this.TextBox_countOfVertexes_TextChanged);
+            this.textBox_countOfVertexes.KeyDown += new KeyEventHandler(CountOfVertex_keyPress);
             // 
             // label1
             // 
@@ -99,7 +100,7 @@ namespace CourseWork_theoryOfDecide
             this.btn_createMatrix.TabIndex = 2;
             this.btn_createMatrix.Text = "Ввести матрицу смежности";
             this.btn_createMatrix.UseVisualStyleBackColor = true;
-            this.btn_createMatrix.Click += new System.EventHandler(this.btn_createMatrix_Click);
+            this.btn_createMatrix.Click += new System.EventHandler(this.Btn_createMatrix_Click);
             // 
             // Form1
             // 

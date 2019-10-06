@@ -8,42 +8,50 @@ namespace CourseWork_theoryOfDecide
 {
     /// <summary>
     /// Класс ребро
-    /// Vertex1 первая вершина
-    /// Vertex2 вторая вершина
-    /// Weight вес дуги из первой вершинв во вторую
     /// </summary>
     public class Edge
     {
-        public int Vertex1 { get; private set; }
-        public int Vertex2 { get; private set; }
+        /// <summary>
+        /// Вершина источник
+        /// </summary>
+        public int SourceVertex { get; private set; }
+
+        /// <summary>
+        /// Конечная вершина
+        /// </summary>
+        public int EndedVertex { get; private set; }
+
+        /// <summary>
+        /// Вес ребра
+        /// </summary>
         public double Weight { get; private set; }
         public Edge(int Vertex1, int Vertex2, double Weight)
         {
-            this.Vertex1 = Vertex1;
-            this.Vertex2 = Vertex2;
+            this.SourceVertex = Vertex1;
+            this.EndedVertex = Vertex2;
             this.Weight = Weight;
         }
     }
     public static class Kernel
     {
         /// <summary>
-        /// Непосредственно алгоритм Прима
+        /// Алгоритм Прима
         /// </summary>
         /// <param name="coutOfVertex">Количество верщин</param>
         /// <param name="Edges">Ребра</param>
-        public static List<Edge> algorithmByPrim(int coutOfVertex, List<Edge> Edges)
+        public static List<Edge> AlgorithmByPrim(int coutOfVertex, List<Edge> Edges)
         {
-            algorithmByPrim(coutOfVertex, Edges, out List<Edge> result);
+            AlgorithmByPrim(coutOfVertex, Edges, out List<Edge> result);
             return result;
         }
 
         /// <summary>
-        /// Непосредственно алгоритм Прима
+        /// Алгоритм Прима
         /// </summary>
         /// <param name="coutOfVertex">Количество верщин</param>
         /// <param name="Edges">Ребра</param>
         /// <param name="Result">Выходной массив</param>
-        public static void algorithmByPrim(int coutOfVertex, List<Edge> Edges, out List<Edge> Result)
+        public static void AlgorithmByPrim(int coutOfVertex, List<Edge> Edges, out List<Edge> Result)
         {
             Random rand = new Random();
 
@@ -71,8 +79,8 @@ namespace CourseWork_theoryOfDecide
                 //поиск наименьшего ребра
                 for (int i = 0; i < nonUsedEdges.Count; i++)
                 {
-                    if (usedVertex.IndexOf(nonUsedEdges[i].Vertex1) != -1 && nonUsedVertex.IndexOf(nonUsedEdges[i].Vertex2) != -1 ||
-                        usedVertex.IndexOf(nonUsedEdges[i].Vertex2) != -1 && nonUsedVertex.IndexOf(nonUsedEdges[i].Vertex1) != -1)
+                    if (usedVertex.IndexOf(nonUsedEdges[i].SourceVertex) != -1 && nonUsedVertex.IndexOf(nonUsedEdges[i].EndedVertex) != -1 ||
+                        usedVertex.IndexOf(nonUsedEdges[i].EndedVertex) != -1 && nonUsedVertex.IndexOf(nonUsedEdges[i].SourceVertex) != -1)
                     {
                         if (minEdge != -1)
                         {
@@ -86,15 +94,15 @@ namespace CourseWork_theoryOfDecide
                     }
                 }
                 //заносим новую вершину в список использованных и удаляем ее из списка неиспользованных
-                if (usedVertex.IndexOf(nonUsedEdges[minEdge].Vertex1) != -1)
+                if (usedVertex.IndexOf(nonUsedEdges[minEdge].SourceVertex) != -1)
                 {
-                    usedVertex.Add(nonUsedEdges[minEdge].Vertex2);
-                    nonUsedVertex.Remove(nonUsedEdges[minEdge].Vertex2);
+                    usedVertex.Add(nonUsedEdges[minEdge].EndedVertex);
+                    nonUsedVertex.Remove(nonUsedEdges[minEdge].EndedVertex);
                 }
                 else
                 {
-                    usedVertex.Add(nonUsedEdges[minEdge].Vertex1);
-                    nonUsedVertex.Remove(nonUsedEdges[minEdge].Vertex1);
+                    usedVertex.Add(nonUsedEdges[minEdge].SourceVertex);
+                    nonUsedVertex.Remove(nonUsedEdges[minEdge].SourceVertex);
                 }
                 //заносим новое ребро в дерево и удаляем его из списка неиспользованных
                 Result.Add(nonUsedEdges[minEdge]);

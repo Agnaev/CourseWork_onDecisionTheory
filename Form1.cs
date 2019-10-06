@@ -21,10 +21,10 @@ namespace CourseWork_theoryOfDecide
             InitializeComponent();
         }
 
-        private void btn_createMatrix_Click(object sender, EventArgs e)
+        private void Btn_createMatrix_Click(object sender, EventArgs e)
         {
             int.TryParse(textBox_countOfVertexes.Text, out int countOfVertexes);
-            if (countOfVertexes < 0)
+            if (countOfVertexes < 2)
             {
                 MessageBox.Show("Укажите корректное число вершин.");
                 return;
@@ -56,7 +56,7 @@ namespace CourseWork_theoryOfDecide
                     AddElementToForm(text[i, j]);
                 }
             }
-            Button btn_getAnswer = new Button
+            Control btn_getAnswer = new Button
             {
                 Text = "Получить ответ.",
                 Location = new Point(26, 69),
@@ -76,10 +76,18 @@ namespace CourseWork_theoryOfDecide
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             TextBox tb = (TextBox)sender;
-            var coordinats = tb.Name.Split(new char[] { '_' });
+            string[] coordinats = tb.Name.Split(new char[] { '_' });
             int.TryParse(coordinats[1], out int x);//второре значение записывается в первое
             int.TryParse(coordinats[0], out int y);//первое - во второе
             text[x, y].Text = tb.Text;
+        }
+
+        private void CountOfVertex_keyPress(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                Btn_createMatrix_Click(sender, new EventArgs());
+            }
         }
 
         /// <summary>
@@ -91,7 +99,8 @@ namespace CourseWork_theoryOfDecide
         {
             try
             {
-                foreach (var textBox in text)
+                foreach (Control textBox in text)
+                {
                     if (string.IsNullOrEmpty(textBox.Text))
                     {
                         MessageBox.Show("Заполните всю матрицу смежности");
@@ -102,6 +111,7 @@ namespace CourseWork_theoryOfDecide
                         MessageBox.Show("Разрешается вводить только числа");
                         return;
                     }
+                }
 
                 List<Edge> Edges = new List<Edge>();
                 for (int i = 1; i <= text.GetLength(0); i++)
@@ -117,7 +127,8 @@ namespace CourseWork_theoryOfDecide
                     }
                 }
 
-                var result = Kernel.algorithmByPrim(text.GetLength(0), Edges);
+                List<Edge> result = new List<Edge>();
+                Kernel.AlgorithmByPrim(text.GetLength(0), Edges, out result);
 
                 int pos = 26 + text.GetLength(0) * 60;
                 double sum = 0;
@@ -127,7 +138,7 @@ namespace CourseWork_theoryOfDecide
                     {
                         Size = new Size(151, 13),
                         Location = new Point(26, pos + i * 25),
-                        Text = $"from {result[i].Vertex1} to {result[i].Vertex2} with weight {result[i].Weight}"
+                        Text = $"from {result[i].SourceVertex} to {result[i].EndedVertex} with weight {result[i].Weight}"
                     });
                     sum += result[i].Weight;
                 }
