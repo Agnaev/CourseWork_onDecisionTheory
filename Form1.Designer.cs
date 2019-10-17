@@ -72,6 +72,7 @@ namespace CourseWork_theoryOfDecide
             this.textBox_countOfVertexes = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btn_createMatrix = new System.Windows.Forms.Button();
+            this.Reload = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox_countOfVertexes
@@ -81,14 +82,14 @@ namespace CourseWork_theoryOfDecide
             this.textBox_countOfVertexes.Size = new System.Drawing.Size(100, 20);
             this.textBox_countOfVertexes.TabIndex = 0;
             this.textBox_countOfVertexes.TextChanged += new System.EventHandler(this.TextBox_countOfVertexes_TextChanged);
-            this.textBox_countOfVertexes.KeyDown += new KeyEventHandler(CountOfVertex_keyPress);
+            this.textBox_countOfVertexes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.CountOfVertex_keyPress);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(132, 43);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(271, 24);
+            this.label1.Size = new System.Drawing.Size(151, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Введите количество вершин";
             // 
@@ -102,16 +103,30 @@ namespace CourseWork_theoryOfDecide
             this.btn_createMatrix.UseVisualStyleBackColor = true;
             this.btn_createMatrix.Click += new System.EventHandler(this.Btn_createMatrix_Click);
             // 
+            // Reload
+            // 
+            this.Reload.Location = new System.Drawing.Point(290, 68);
+            this.Reload.Name = "Reload";
+            this.Reload.Size = new System.Drawing.Size(75, 23);
+            this.Reload.TabIndex = 3;
+            this.Reload.Text = "Reload";
+            this.Reload.UseVisualStyleBackColor = true;
+            this.Reload.Visible = false;
+            this.Reload.Click += new System.EventHandler(this.Reload_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.Reload);
             this.Controls.Add(this.btn_createMatrix);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox_countOfVertexes);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Course work";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -122,8 +137,7 @@ namespace CourseWork_theoryOfDecide
         private TextBox textBox_countOfVertexes;
         private Label label1;
         private Button btn_createMatrix;
-        
-
+        private Button Reload;
     }
 }
 
